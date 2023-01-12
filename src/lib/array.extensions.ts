@@ -98,7 +98,7 @@ export const extendArray = () =>
         for (const e of <Array<T>>this)
         {
             if (!e) continue;
-            out.push(e);
+            out.push(e as NonNullable<T>);
         }
         return out;
     }
