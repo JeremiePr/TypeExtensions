@@ -3,10 +3,12 @@ declare global
     interface Array<T>
     {
         sum(selector: ((input: T) => number)): number;
+        indexWhere(predicate: ((input: T) => boolean)): number;
         shuffle(): Array<T>;
         parallel(action: (e: T, i: number) => Promise<void>): Promise<void>;
         groupBy<U>(selector: (e: T) => U): Array<{ key: U; values: Array<T>; }>;
         distinct(): Array<T>;
+        filterNil(): Array<NonNullable<T>>;
     }
 }
 
@@ -15,7 +17,7 @@ export const extendArray = () =>
     Array.prototype.sum = function <T>(selector: ((input: T) => number)): number
     {
         let out = 0;
-        for (const e of this)
+        for (const e of (<Array<T>>this))
         {
             const selected = selector(e);
             if (typeof (selected) === 'number')
@@ -26,27 +28,39 @@ export const extendArray = () =>
         return out;
     };
 
-    Array.prototype.shuffle = function ()
+    Array.prototype.indexWhere = function <T>(predicate: ((input: T) => boolean)): number
     {
-        let currentIndex = this.length;
+        for (let i = 0; i < (<Array<T>>this).length; i++)
+        {
+            if (predicate((<Array<T>>this)[i]))
+            {
+                return i;
+            }
+        }
+        return 0;
+    };
+
+    Array.prototype.shuffle = function <T>()
+    {
+        let currentIndex = (<Array<T>>this).length;
         let randomIndex: number;
         while (currentIndex != 0)
         {
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
-            [this[currentIndex], this[randomIndex]] = [this[randomIndex], this[currentIndex]];
+            [(<Array<T>>this)[currentIndex], (<Array<T>>this)[randomIndex]] = [(<Array<T>>this)[randomIndex], (<Array<T>>this)[currentIndex]];
         }
-        return this;
+        return (<Array<T>>this);
     }
 
     Array.prototype.parallel = function <T>(action: (e: T, i: number) => Promise<void>): Promise<void>
     {
         return new Promise<void>((resolve, reject) =>
         {
-            for (let i = 0; i < this.length; i++)
+            for (let i = 0; i < (<Array<T>>this).length; i++)
             {
-                action(this[i], i)
-                    .then(() => i + 1 === this.length ? resolve() : 0)
+                action((<Array<T>>this)[i], i)
+                    .then(() => i + 1 === (<Array<T>>this).length ? resolve() : 0)
                     .catch(err => reject(err));
             }
         });
@@ -55,7 +69,7 @@ export const extendArray = () =>
     Array.prototype.groupBy = function <T, U>(selector: (e: T) => U): Array<{ key: U; values: Array<T> }>
     {
         const map = new Map<U, Array<T>>();
-        for (const e of this)
+        for (const e of (<Array<T>>this))
         {
             const key = selector(e);
             const values = map.get(key);
@@ -73,8 +87,19 @@ export const extendArray = () =>
 
     Array.prototype.distinct = function <T>(): Array<T>
     {
-        return this
+        return (<Array<T>>this)
             .groupBy(x => x)
             .map(x => x.key);
+    }
+
+    Array.prototype.filterNil = function <T>(): Array<NonNullable<T>>
+    {
+        const out: Array<NonNullable<T>> = [];
+        for (const e of <Array<T>>this)
+        {
+            if (!e) continue;
+            out.push(e);
+        }
+        return out;
     }
 };
