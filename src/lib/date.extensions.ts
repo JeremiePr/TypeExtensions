@@ -2,14 +2,16 @@ declare global
 {
     interface Date
     {
-        toSqlString(): string;
+        toDateISOString(): string;
         getRangeTo(date: Date): Array<Date>;
+        getFirstDayOfYear(): Date;
+        addYears(years: number): Date;
     }
 }
 
 export const extendDate = () =>
 {
-    Date.prototype.toSqlString = function ()
+    Date.prototype.toDateISOString = function ()
     {
         const year = this.getFullYear().toString();
         const month = this.getMonth() < 9 ? `0${this.getMonth() + 1}` : (this.getMonth() + 1).toString();
@@ -27,5 +29,15 @@ export const extendDate = () =>
             dates.push(new Date(d.getTime()));
         }
         return dates;
+    }
+
+    Date.prototype.getFirstDayOfYear = function (): Date
+    {
+        return new Date(this.getFullYear(), 0, 1);
+    }
+
+    Date.prototype.addYears = function (years: number): Date
+    {
+        return new Date(this.getFullYear() + years, this.getMonth(), this.getDate());
     }
 };
