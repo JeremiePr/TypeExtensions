@@ -2,7 +2,7 @@ declare global
 {
     interface Date
     {
-        toDateISOString(): string;
+        toDateISOString(separator?: string): string;
         getRangeTo(date: Date): Array<Date>;
         getFirstDayOfYear(): Date;
         addYears(years: number): Date;
@@ -11,12 +11,13 @@ declare global
 
 export const extendDate = () =>
 {
-    Date.prototype.toDateISOString = function ()
+    Date.prototype.toDateISOString = function (separator?: string)
     {
+        separator ??= '-';
         const year = this.getFullYear().toString();
         const month = this.getMonth() < 9 ? `0${this.getMonth() + 1}` : (this.getMonth() + 1).toString();
         const day = this.getDate() < 10 ? `0${this.getDate()}` : this.getDate().toString();
-        return `${year}-${month}-${day}`;
+        return `${year}${separator}${month}${separator}${day}`;
     };
 
     Date.prototype.getRangeTo = function (date: Date): Array<Date>

@@ -17,8 +17,8 @@ const testMethods: Array<() => void> = [
     {
         const expectedActualPairs = [
             { expected: '2023-02-14', actual: new Date(2023, 1, 14).toDateISOString() },
-            { expected: '2005-01-01', actual: new Date(2005, 0, 1).toDateISOString() },
-            { expected: '1998-07-15', actual: new Date(1998, 6, 15).toDateISOString() },
+            { expected: '2005_01_01', actual: new Date(2005, 0, 1).toDateISOString('_') },
+            { expected: '1998/07/15', actual: new Date(1998, 6, 15).toDateISOString('/') },
             { expected: '2030-12-31', actual: new Date(2030, 11, 31).toDateISOString() }
         ];
 
