@@ -37,7 +37,7 @@ export const extendArray = () =>
                 return i;
             }
         }
-        return 0;
+        return -1;
     };
 
     Array.prototype.shuffle = function <T>()
