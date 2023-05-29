@@ -1,6 +1,6 @@
 {
     "name": "@jeje-devs/type-extensions",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Package containing common TypeScript extensions",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
     "author": "jeje-devs",
     "license": "ISC",
     "dependencies": {
-        "@jeje-devs/plume-testing": "^2.1.2"
+        "@jeje-devs/plume-testing": "^2.1.4"
     },
     "scripts": {
         "build": "tsc",
