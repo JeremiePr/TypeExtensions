@@ -1,4 +1,4 @@
-# JejeQL
+# TypeExtensions
 
 ## Table of contents
 
