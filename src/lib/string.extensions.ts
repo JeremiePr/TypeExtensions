@@ -26,15 +26,12 @@ export const extendString = () =>
 
     String.prototype.toBooleanOrNull = function (): boolean | null
     {
-        const booleanValue = Boolean(this);
-        if (!booleanValue)
-        {
-            return null;
-        }
-        else
-        {
-            return booleanValue;
-        }
+        if (this === 'true' || this === '1')
+            return true;
+        else if (this === 'false' || this === '0')
+            return false;
+
+        return null;
     }
 
     String.prototype.isValidUrl = function (): boolean
@@ -44,7 +41,8 @@ export const extendString = () =>
 
     String.prototype.toFilename = function (): string
     {
-        return this.isValidUrl() ? this.replace(/^.*[\\\/]/, '') : this.toString();
+        const filenameWithQuery: string = this.isValidUrl() ? this.replace(/^.*[\\\/]/, '') : this.toString();
+        return filenameWithQuery.split('?')[0];
     }
 
     String.prototype.isAlphaNumeric = function (): boolean

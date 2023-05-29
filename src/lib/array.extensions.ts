@@ -97,8 +97,9 @@ export const extendArray = () =>
         const out: Array<NonNullable<T>> = [];
         for (const e of <Array<T>>this)
         {
-            if (!e) continue;
-            out.push({ ...e } as NonNullable<T>);
+            if (e == null) continue;
+            const eClone = typeof (e) === 'object' || typeof (e) === 'function' ? { ...e } : e;
+            out.push(eClone as NonNullable<T>);
         }
         return out;
     }
